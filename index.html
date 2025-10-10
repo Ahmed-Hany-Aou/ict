@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Interactive ICT learning platform for Egyptian secondary students covering Chapters 1-3">
+  <title>ICT Interactive: Chapters 1-12</title>
+  <style>
+    /* Import enhanced responsive styles */
+    :root {
+      --primary-color: #23395d;
+      --primary-dark: #1a2b47;
+      --secondary-color: #17417a;
+      --accent-color: #4a90e2;
+      --success-color: #28a745;
+      --text-dark: #212529;
+      --bg-light: #fafbfc;
+      --bg-white: #ffffff;
+      --border-radius: 12px;
+      --box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: var(--text-dark);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    nav {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.4rem;
+      background: linear-gradient(45deg, #fff, #a8d8ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-link {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: var(--bg-white);
+      padding: 3rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      color: var(--primary-color);
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    h2 {
+      color: var(--primary-color);
+      font-size: 2rem;
+      margin: 2rem 0 1rem 0;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: var(--accent-color);
+      border-radius: 2px;
+    }
+
+    .chapter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .chapter-card {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      color: white;
+      text-decoration: none;
+      transition: var(--transition);
+      box-shadow: var(--box-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .chapter-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .chapter-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .chapter-card p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+
+    .menu-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1100;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.8rem;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: var(--transition);
+    }
+
+    .menu-btn:hover {
+      transform: scale(1.1) rotate(90deg);
+    }
+
+    .side-menu {
+      position: fixed;
+      left: -300px;
+      top: 0;
+      bottom: 0;
+      width: 280px;
+      background: linear-gradient(180deg, var(--secondary-color) 0%, var(--primary-dark) 100%);
+      color: #fff;
+      z-index: 1200;
+      box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
+      transition: left 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      padding: 80px 20px 30px;
+      overflow-y: auto;
+    }
+
+    .menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1100;
+      display: none;
+      backdrop-filter: blur(2px);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 2rem;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+
+    .close-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: rotate(90deg);
+    }
+
+    .side-menu.show {
+      left: 0;
+    }
+
+    .side-menu h2 {
+      color: #fff;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+      background: none;
+      -webkit-text-fill-color: currentColor;
+    }
+
+    .side-menu h2::after {
+      display: none;
+    }
+
+    .side-menu ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .side-menu li {
+      margin-bottom: 0.5rem;
+    }
+
+    .side-menu a {
+      color: #fff;
+      text-decoration: none;
+      display: block;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+
+    .side-menu a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      padding-left: 1.5rem;
+    }
+
+    .main-section {
+      display: none;
+    }
+
+    .main-section.active {
+      display: block;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      margin-top: 3rem;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .feature-list li {
+      padding: 1rem;
+      margin: 0.5rem 0;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid var(--accent-color);
+    }
+
+    .feature-list li strong {
+      color: var(--primary-color);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 900px) {
+      nav {
+        padding: 1rem;
+        gap: 1rem;
+      }
+
+      main {
+        margin: 1.5rem auto;
+        padding: 2rem;
+        max-width: 95%;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      h2 {
+        font-size: 1.6rem;
+      }
+
+      .chapter-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+      }
+    }
+
+    @media (max-width: 700px) {
+      nav {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.8rem;
+      }
+
+      .logo {
+        font-size: 1.2rem;
+      }
+
+      .nav-link {
+        padding: 0.6rem;
+        text-align: center;
+      }
+
+      main {
+        padding: 1.5rem;
+        margin: 1rem;
+      }
+
+      h1 {
+        font-size: 1.75rem;
+      }
+
+      h2 {
+        font-size: 1.4rem;
+      }
+
+      .side-menu {
+        width: 85vw;
+        left: -85vw;
+      }
+
+      .menu-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1.6rem;
+      }
+
+      .chapter-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .chapter-card {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      main {
+        padding: 1rem;
+        margin: 0.5rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .menu-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.4rem;
+        top: 10px;
+        left: 10px;
+      }
+
+      .side-menu {
+        width: 90vw;
+        left: -90vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <span class="logo">ICT Interactive</span>
+    <a href="#home" class="nav-link" onclick="App.showSection('home')">Home</a>
+    <a href="#ch1" class="nav-link" onclick="App.showSection('ch1')">Chapter 1</a>
+    <a href="#ch2" class="nav-link" onclick="App.showSection('ch2')">Chapter 2</a>
+    <a href="#ch3" class="nav-link" onclick="App.showSection('ch3')">Chapter 3</a>
+    <button id="menuBtn" class="menu-btn" onclick="Menu.openMenu()">☰</button>
+  </nav>
+
+  <div id="sideMenuOverlay" class="menu-overlay" onclick="Menu.closeMenu()"></div>
+  
+  <aside id="sideMenu" class="side-menu">
+    <button class="close-btn" onclick="Menu.closeMenu()">×</button>
+    <h2>All Chapters</h2>
+    <ul>
+      <li><a href="ch1slides.html" target="_blank">Chapter 1: Data, Information & Knowledge</a></li>
+      <li><a href="ch2slides.html" target="_blank">Chapter 2: Information Systems</a></li>
+      <li><a href="ch3slides.html" target="_blank">Chapter 3: Cyber Security</a></li>
+      <li><a href="ch4slides.html" target="_blank">Chapter 4: Computing Devices</a></li>
+      <li><a href="ch5slides.html" target="_blank">Chapter 5: Networks</a></li>
+      <li><a href="ch6slides.html" target="_blank">Chapter 6: Internet & Web</a></li>
+      <li><a href="ch7slides.html" target="_blank">Chapter 7: Software</a></li>
+      <li><a href="ch8slides.html" target="_blank">Chapter 8: Databases</a></li>
+      <li><a href="ch9slides.html" target="_blank">Chapter 9: Programming Basics</a></li>
+      <li><a href="ch10slides.html" target="_blank">Chapter 10: Algorithms</a></li>
+      <li><a href="ch11slides.html" target="_blank">Chapter 11: Digital Media</a></li>
+      <li><a href="ch12slides.html" target="_blank">Chapter 12: Emerging Technologies</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <!-- Home Section -->
+    <section id="home-section" class="main-section active">
+      <h1>Welcome to ICT Interactive</h1>
+      <p style="font-size: 1.1rem; color: #6c757d; margin-bottom: 2rem;">
+        Your comprehensive learning platform for Egyptian Secondary ICT Curriculum
+      </p>
+
+      <h2>Featured Chapters</h2>
+      <div class="chapter-grid">
+        <a href="ch1slides.html" target="_blank" class="chapter-card">
+          <h3>Chapter 1</h3>
+          <p>Data, Information, and Knowledge</p>
+        </a>
+        <a href="ch2slides.html" target="_blank" class="chapter-card">
+          <h3>Chapter 2</h3>
+          <p>Information Systems</p>
+        </a>
+        <a href="ch3slides.html" target="_blank" class="chapter-card">
+          <h3>Chapter 3</h3>
+          <p>Cyber Security Fundamentals</p>
+        </a>
+        <a href="ch4slides.html" target="_blank" class="chapter-card">
+          <h3>Chapter 4</h3>
+          <p>Computing Devices</p>
+        </a>
+        <a href="ch5slides.html" target="_blank" class="chapter-card">
+          <h3>Chapter 5</h3>
+          <p>Computer Networks</p>
+        </a>
+        <a href="ch6slides.html" target="_blank" class="chapter-card">
+          <h3>Chapter 6</h3>
+          <p>Internet & World Wide Web</p>
+        </a>
+      </div>
+
+      <h2>Platform Features</h2>
+      <ul class="feature-list">
+        <li>
+          <strong>Interactive Slides:</strong> Navigate through beautifully designed presentation slides for each chapter
+        </li>
+        <li>
+          <strong>Responsive Design:</strong> Access content seamlessly on desktop, tablet, or mobile devices
+        </li>
+        <li>
+          <strong>Quick Navigation:</strong> Use keyboard arrows or touch swipes to move between slides
+        </li>
+        <li>
+          <strong>Review Questions:</strong> Test your knowledge with quizzes and model answers
+        </li>
+        <li>
+          <strong>Real-World Examples:</strong> Understand concepts through practical scenarios
+        </li>
+      </ul>
+
+      <h2>How to Use</h2>
+      <ul class="feature-list">
+        <li>Click on any chapter card to open the interactive slides</li>
+        <li>Use the <strong>☰ menu button</strong> to access all 12 chapters quickly</li>
+        <li>Navigate slides using arrow buttons, keyboard arrows, or swipe gestures</li>
+        <li>Each chapter includes definitions, examples, and review questions</li>
+      </ul>
+
+      <div style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); padding: 2rem; border-radius: 12px; margin-top: 2rem; text-align: center;">
+        <h3 style="color: #23395d; margin-bottom: 1rem;">Ready to Start Learning?</h3>
+        <p style="margin-bottom: 1.5rem;">Choose a chapter from the grid above or open the menu to see all available chapters!</p>
+        <button onclick="Menu.openMenu()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1rem; font-weight: 600; cursor: pointer;">
+          Browse All Chapters
+        </button>
+      </div>
+    </section>
+
+    <!-- Chapter 1 Section -->
+    <section class="main-section" id="ch1-section">
+      <h1>Chapter 1: Data, Information, and Knowledge</h1>
+      
+      <h2>Overview</h2>
+      <p>This chapter introduces the fundamental concepts of data, information, and knowledge in the context of Information and Communication Technology.</p>
+
+      <h2>Key Topics</h2>
+      <ul class="feature-list">
+        <li><strong>Data:</strong> Raw facts, figures, and symbols without context</li>
+        <li><strong>Information:</strong> Processed data with meaning and value</li>
+        <li><strong>Knowledge:</strong> Understanding gained from information to make decisions</li>
+        <li><strong>Characteristics:</strong> Persistence, reproducibility, and easy spreading</li>
+        <li><strong>Information Types:</strong> Primary vs Secondary sources</li>
+        <li><strong>Data Processing:</strong> Converting raw data into meaningful information</li>
+      </ul>
+
+      <div style="margin-top: 2rem; text-align: center;">
+        <a href="ch1slides.html" target="_blank" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; padding: 15px 35px; border-radius: 25px; font-size: 1.1rem; font-weight: 600; display: inline-block; transition: transform 0.3s;">
+          Open Chapter 1 Slides →
+        </a>
+      </div>
+    </section>
+
+    <!-- Chapter 2 Section -->
+    <section class="main-section" id="ch2-section">
+      <h1>Chapter 2: Information Systems</h1>
+      
+      <h2>Overview</h2>
+      <p>Explore how information systems work and their role in organizations and daily life.</p>
+
+      <h2>Key Topics</h2>
+      <ul class="feature-list">
+        <li><strong>Components:</strong> Hardware, software, data, people, and processes</li>
+        <li><strong>Types of Systems:</strong> Transaction processing, management information systems</li>
+        <li><strong>System Development:</strong> Planning, analysis, design, implementation</li>
+        <li><strong>Applications:</strong> Business, education, healthcare systems</li>
+      </ul>
+
+      <div style="margin-top: 2rem; text-align: center;">
+        <a href="ch2slides.html" target="_blank" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; padding: 15px 35px; border-radius: 25px; font-size: 1.1rem; font-weight: 600; display: inline-block;">
+          Open Chapter 2 Slides →
+        </a>
+      </div>
+    </section>
+
+    <!-- Chapter 3 Section -->
+    <section class="main-section" id="ch3-section">
+      <h1>Chapter 3: Cyber Security</h1>
+      
+      <h2>Overview</h2>
+      <p>Learn about protecting digital information and systems from threats and vulnerabilities.</p>
+
+      <h2>Key Topics</h2>
+      <ul class="feature-list">
+        <li><strong>Threats:</strong> Malware, phishing, social engineering</li>
+        <li><strong>Protection:</strong> Passwords, encryption, firewalls</li>
+        <li><strong>Best Practices:</strong> Updates, backups, safe browsing</li>
+        <li><strong>Privacy:</strong> Personal data protection and digital rights</li>
+      </ul>
+
+      <div style="margin-top: 2rem; text-align: center;">
+        <a href="ch3slides.html" target="_blank" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; padding: 15px 35px; border-radius: 25px; font-size: 1.1rem; font-weight: 600; display: inline-block;">
+          Open Chapter 3 Slides →
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 ICT Interactive | Made for Egyptian Secondary Learning</p>
+    <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.9;">Empowering students with interactive ICT education</p>
+  </footer>
+
+  <script>
+    // App class for section navigation
+    class App {
+      static showSection(section) {
+        const sections = ['home', 'ch1', 'ch2', 'ch3'];
+        sections.forEach(id => {
+          const element = document.getElementById(id + '-section');
+          if (element) {
+            element.classList.toggle('active', id === section);
+          }
+        });
+        window.scrollTo(0, 0);
+        Menu.closeMenu();
+      }
+      
+      static init() {
+        this.showSection('home');
+      }
+    }
+
+    // Menu class for side menu
+    class Menu {
+      static openMenu() {
+        const menu = document.getElementById("sideMenu");
+        const overlay = document.getElementById("sideMenuOverlay");
+        menu.classList.add("show");
+        overlay.style.display = "block";
+        document.body.style.overflow = "hidden";
+      }
+      
+      static closeMenu() {
+        const menu = document.getElementById("sideMenu");
+        const overlay = document.getElementById("sideMenuOverlay");
+        menu.classList.remove("show");
+        overlay.style.display = "none";
+        document.body.style.overflow = "";
+      }
+    }
+
+    // Quiz class for interactive quizzes
+    class Quiz {
+      static checkQuiz1() {
+        const a1 = document.getElementById('q1a1')?.value.toLowerCase() || '';
+        const a2 = document.getElementById('q1a2')?.value || '';
+        let score = 0;
+        
+        if(a1.includes('meaning') || a1.includes('processed') || (a1.includes('data') && a1.includes('raw'))) {
+          score++;
+        }
+        if(a2 === "It spreads easily") {
+          score++;
+        }
+        
+        Quiz.animateResult('result1', `${score}/2 correct!`);
+      }
+      
+      static checkQuiz2() {
+        const a1 = document.getElementById('q2a1')?.value.toLowerCase() || '';
+        const a2 = document.getElementById('q2a2')?.value.toLowerCase() || '';
+        let score = 0;
+        
+        if(a1.includes('name') || a1.includes('address') || a1.includes('number') || a1.includes('personal')) {
+          score++;
+        }
+        if(a2.includes('protect') || a2.includes('ideas') || a2.includes('creation') || a2.includes('copy')) {
+          score++;
+        }
+        
+        Quiz.animateResult('result2', `${score}/2 correct!`);
+      }
+      
+      static checkQuiz3() {
+        const a1 = document.getElementById('q3a1')?.value || '';
+        const a2 = document.getElementById('q3a2')?.value.toLowerCase() || '';
+        let score = 0;
+        
+        if(a1 === "Phishing emails") {
+          score++;
+        }
+        if(a2.includes('password') || a2.includes('update') || a2.includes('backup')) {
+          score++;
+        }
+        
+        Quiz.animateResult('result3', `${score}/2 correct!`);
+      }
+      
+      static animateResult(id, text) {
+        const el = document.getElementById(id);
+        if (el) {
+          el.textContent = text;
+          el.style.background = "#d4f3ce";
+          el.style.padding = "10px";
+          el.style.borderRadius = "8px";
+          el.style.transition = "background 0.5s";
+          setTimeout(() => { el.style.background = ""; }, 1200);
+        }
+      }
+    }
+
+    // Initialize app
+    document.addEventListener('DOMContentLoaded', () => {
+      App.init();
+      
+      // Close menu on window resize
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 900) {
+          Menu.closeMenu();
+        }
+      });
+
+      // Close menu on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          Menu.closeMenu();
+        }
+      });
+    });
+
+    // Make classes available globally
+    window.App = App;
+    window.Menu = Menu;
+    window.Quiz = Quiz;
+  </script>
+</body>
+</html>
