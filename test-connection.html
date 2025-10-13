@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Backend Connection Test</title>
+</head>
+<body>
+    <h1>Backend Connection Test</h1>
+    <button onclick="testConnection()">Test Connection</button>
+    <button onclick="testRegister()">Test Register</button>
+    <button onclick="testLogin()">Test Login</button>
+    <div id="results"></div>
+
+    <script>
+        const baseURL = 'http://localhost:8000/api';
+        
+        async function testConnection() {
+            try {
+                const response = await fetch(`${baseURL}/test`);
+                const data = await response.json();
+                document.getElementById('results').innerHTML = 
+                    `<p style="color: green;">✅ Connection successful: ${data.message}</p>`;
+            } catch (error) {
+                document.getElementById('results').innerHTML = 
+                    `<p style="color: red;">❌ Connection failed: ${error.message}</p>`;
+            }
+        }
+        
+        async function testRegister() {
+            try {
+                const response = await fetch(`${baseURL}/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: 'Test User',
+                        email: 'test@example.com',
+                        password: 'password123',
+                        password_confirmation: 'password123'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('results').innerHTML += 
+                        `<p style="color: green;">✅ Registration successful</p>`;
+                    localStorage.setItem('auth_token', data.access_token);
+                } else {
+                    document.getElementById('results').innerHTML += 
+                        `<p style="color: orange;">⚠️ Registration response: ${JSON.stringify(data)}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('results').innerHTML += 
+                    `<p style="color: red;">❌ Registration failed: ${error.message}</p>`;
+            }
+        }
+        
+        async function testLogin() {
+            try {
+                const response = await fetch(`${baseURL}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'test@example.com',
+                        password: 'password123'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('results').innerHTML += 
+                        `<p style="color: green;">✅ Login successful</p>`;
+                    localStorage.setItem('auth_token', data.access_token);
+                } else {
+                    document.getElementById('results').innerHTML += 
+                        `<p style="color: orange;">⚠️ Login response: ${JSON.stringify(data)}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('results').innerHTML += 
+                    `<p style="color: red;">❌ Login failed: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
